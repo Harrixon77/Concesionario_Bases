@@ -1,0 +1,110 @@
+/* css/styles.css */
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+#sidebar .sidebar-header {
+    border-bottom: 1px solid #444;
+}
+
+#sidebar .nav-link {
+    color: #ddd;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+#sidebar .nav-link:hover {
+    background: #3a3a3a;
+    color: white;
+}
+
+#sidebar .nav-link.active {
+    background: #007bff;
+    color: white;
+}
+
+#sidebar .nav-link i {
+    margin-right: 10px;
+    width: 20px;
+}
+
+#content {
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+    background: #f8f9fa;
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #444;
+}
+
+.user-info {
+    color: #ddd;
+    font-size: 14px;
+}
+
+.user-info i {
+    font-size: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.card-stats {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
+
+.card-stats:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    font-size: 40px;
+    opacity: 0.3;
+}
+
+.table-actions i {
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.table-actions i:hover {
+    opacity: 0.7;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+}
+
+.loading i {
+    font-size: 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
