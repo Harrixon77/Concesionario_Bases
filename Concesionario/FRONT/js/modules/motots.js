@@ -80,4 +80,4 @@ const motosModule = {
         if (tbody) tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger">
             <i class="fas fa-exclamation-circle"></i> ${message}</td></tr>`;
     }
-};
+}; 
