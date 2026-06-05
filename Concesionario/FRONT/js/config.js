@@ -1,7 +1,7 @@
 // js/config.js
 const CONFIG = {
     // Cambiar según tu entorno
-    API_URL: 'http://localhost/Concesionario/BACKEND/Api/',
+    API_URL: 'http://localhost/Concesionario/Concesionario/BACKEND/Api/',
     DB_HOST: 'localhost',
     DB_USER: 'root',
     DB_PASSWORD: '',

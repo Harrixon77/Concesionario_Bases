@@ -9,29 +9,19 @@
     <style>
         * { box-sizing: border-box; }
         body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; margin: 0; }
-
-        /* NAVBAR */
         .navbar {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 15px 0;
-            position: sticky; top: 0; z-index: 999;
+            padding: 15px 0; position: sticky; top: 0; z-index: 999;
             box-shadow: 0 2px 20px rgba(0,0,0,0.3);
         }
         .navbar-brand { color: #ffd700 !important; font-size: 1.5rem; font-weight: 800; }
-        .navbar-brand i { margin-right: 8px; }
-
-        /* HERO */
         .hero {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: white;
-            padding: 80px 0 60px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            color: white; padding: 80px 0 60px; text-align: center;
+            position: relative; overflow: hidden;
         }
         .hero::before {
-            content: '';
-            position: absolute; inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200') center/cover;
             opacity: 0.08;
         }
@@ -39,145 +29,78 @@
         .hero h1 span { color: #ffd700; }
         .hero p { font-size: 1.2rem; opacity: 0.85; position: relative; }
         .hero-badge {
-            display: inline-block;
-            background: rgba(255,215,0,0.15);
-            border: 1px solid rgba(255,215,0,0.4);
-            color: #ffd700;
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            margin-top: 10px;
-            position: relative;
+            display: inline-block; background: rgba(255,215,0,0.15);
+            border: 1px solid rgba(255,215,0,0.4); color: #ffd700;
+            padding: 6px 18px; border-radius: 50px; font-size: 0.85rem;
+            margin-top: 10px; position: relative;
         }
-
-        /* SEARCH BAR */
-        .search-section {
-            background: white;
-            padding: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-        }
-        .search-bar {
-            display: flex; gap: 10px; align-items: center;
-            max-width: 700px; margin: 0 auto;
-        }
+        .search-section { background: white; padding: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+        .search-bar { display: flex; gap: 10px; align-items: center; max-width: 700px; margin: 0 auto; }
         .search-bar input {
             flex: 1; border: 2px solid #e0e0e0; border-radius: 50px;
-            padding: 10px 20px; font-size: 1rem; outline: none;
-            transition: border 0.2s;
+            padding: 10px 20px; font-size: 1rem; outline: none; transition: border 0.2s;
         }
         .search-bar input:focus { border-color: #667eea; }
-        .search-bar select {
-            border: 2px solid #e0e0e0; border-radius: 50px;
-            padding: 10px 15px; outline: none;
-        }
+        .search-bar select { border: 2px solid #e0e0e0; border-radius: 50px; padding: 10px 15px; outline: none; }
         .btn-buscar {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white; border: none; border-radius: 50px;
             padding: 10px 25px; font-weight: 600; cursor: pointer;
         }
-
-        /* CARDS */
         .catalogo { padding: 40px 0; }
         .moto-card {
-            background: white;
-            border-radius: 18px;
-            overflow: hidden;
+            background: white; border-radius: 18px; overflow: hidden;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             transition: transform 0.25s, box-shadow 0.25s;
-            height: 100%;
-            display: flex; flex-direction: column;
+            height: 100%; display: flex; flex-direction: column;
         }
-        .moto-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-        }
-        .moto-img-wrap {
-            position: relative;
-            height: 200px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-        }
-        .moto-img-wrap img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s;
-        }
+        .moto-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+        .moto-img-wrap { position: relative; height: 200px; overflow: hidden; background: linear-gradient(135deg, #f5f7fa, #c3cfe2); }
+        .moto-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
         .moto-card:hover .moto-img-wrap img { transform: scale(1.08); }
         .badge-cat {
             position: absolute; top: 12px; left: 12px;
             background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white; padding: 4px 12px; border-radius: 50px;
-            font-size: 0.75rem; font-weight: 600;
+            color: white; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 600;
         }
-        .badge-stock {
-            position: absolute; top: 12px; right: 12px;
-            background: #28a745; color: white;
-            padding: 4px 10px; border-radius: 50px;
-            font-size: 0.75rem; font-weight: 600;
-        }
-        .badge-agotado {
-            background: #dc3545;
-        }
-        .card-body-custom {
-            padding: 18px 20px;
-            flex: 1; display: flex; flex-direction: column;
-        }
-        .moto-nombre {
-            font-size: 1.15rem; font-weight: 800;
-            color: #1a1a2e; margin-bottom: 4px;
-        }
-        .moto-specs {
-            display: flex; gap: 12px; flex-wrap: wrap;
-            margin: 10px 0; font-size: 0.82rem; color: #666;
-        }
+        .badge-stock { position: absolute; top: 12px; right: 12px; background: #28a745; color: white; padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; }
+        .badge-agotado { background: #dc3545; }
+        .card-body-custom { padding: 18px 20px; flex: 1; display: flex; flex-direction: column; }
+        .moto-nombre { font-size: 1.15rem; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
+        .moto-specs { display: flex; gap: 12px; flex-wrap: wrap; margin: 10px 0; font-size: 0.82rem; color: #666; }
         .moto-specs span { display: flex; align-items: center; gap: 4px; }
-        .moto-precio {
-            font-size: 1.5rem; font-weight: 900;
-            color: #28a745; margin: 10px 0;
-        }
+        .moto-precio { font-size: 1.5rem; font-weight: 900; color: #28a745; margin: 10px 0; }
         .btn-cotizar {
-            margin-top: auto;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin-top: auto; background: linear-gradient(135deg, #667eea, #764ba2);
             color: white; border: none; border-radius: 10px;
             padding: 12px; font-weight: 700; font-size: 1rem;
-            cursor: pointer; width: 100%;
-            transition: opacity 0.2s, transform 0.1s;
+            cursor: pointer; width: 100%; transition: opacity 0.2s, transform 0.1s;
         }
         .btn-cotizar:hover { opacity: 0.9; transform: scale(0.98); }
-        .btn-cotizar:disabled {
-            background: #ccc; cursor: not-allowed; transform: none;
-        }
-
-        /* MODAL */
+        .btn-cotizar:disabled { background: #ccc; cursor: not-allowed; transform: none; }
         .modal-content { border-radius: 18px; overflow: hidden; border: none; }
-        .modal-auth-header {
-            background: linear-gradient(135deg, #1a1a2e, #0f3460);
-            color: white; padding: 20px 25px;
-        }
+        .modal-auth-header { background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; padding: 20px 25px; }
         .tab-btn {
             flex: 1; padding: 10px; border: none; background: rgba(255,255,255,0.1);
-            color: white; font-weight: 600; cursor: pointer; border-radius: 8px;
-            transition: background 0.2s;
+            color: white; font-weight: 600; cursor: pointer; border-radius: 8px; transition: background 0.2s;
         }
         .tab-btn.active { background: #ffd700; color: #1a1a2e; }
-
-        /* FOOTER */
-        footer {
-            background: #1a1a2e; color: rgba(255,255,255,0.6);
-            text-align: center; padding: 30px;
-            margin-top: 60px; font-size: 0.9rem;
-        }
+        /* Indicadores de validación */
+        .form-control.is-invalid { border-color: #dc3545; background-image: none; }
+        .form-control.is-valid   { border-color: #28a745; background-image: none; }
+        .pass-hints { font-size: 0.78rem; margin-top: 5px; }
+        .pass-hints span { margin-right: 8px; }
+        .hint-ok  { color: #28a745; }
+        .hint-mal { color: #dc3545; }
+        footer { background: #1a1a2e; color: rgba(255,255,255,0.6); text-align: center; padding: 30px; margin-top: 60px; font-size: 0.9rem; }
         footer span { color: #ffd700; }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <div class="container d-flex justify-content-between align-items-center">
-        <a class="navbar-brand" href="tienda.html">
-            <i class="fas fa-motorcycle"></i> MotoCon
-        </a>
+        <a class="navbar-brand" href="tienda.html"><i class="fas fa-motorcycle"></i> MotoCon</a>
         <div class="d-flex gap-2 align-items-center">
             <span id="clienteNombreNav" class="text-warning fw-bold d-none"></span>
             <button id="btnLogin" class="btn btn-outline-warning btn-sm fw-bold" onclick="mostrarAuth('login')">
@@ -190,7 +113,6 @@
     </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
     <div class="container">
         <h1>🏍️ Las mejores motos<br><span>de Colombia</span></h1>
@@ -201,20 +123,16 @@
     </div>
 </div>
 
-<!-- BÚSQUEDA -->
 <div class="search-section">
     <div class="container">
         <div class="search-bar">
             <input type="text" id="buscar" placeholder="🔍  Buscar por marca o modelo...">
-            <select id="filtroCategoria">
-                <option value="">Todas las categorías</option>
-            </select>
+            <select id="filtroCategoria"><option value="">Todas las categorías</option></select>
             <button class="btn-buscar" onclick="filtrar()">Buscar</button>
         </div>
     </div>
 </div>
 
-<!-- CATÁLOGO -->
 <div class="catalogo">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -228,11 +146,10 @@
     </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
     <p>© 2024 <span>MotoCon Colombia</span> · Concesionario de Motos Bogotá<br>
     <i class="fas fa-map-marker-alt"></i> Bogotá, Colombia &nbsp;|&nbsp;
-    <i class="fab fa-whatsapp"></i> +57 311 555 73 89 </p>
+    <i class="fab fa-whatsapp"></i> +57 311 555 73 89</p>
 </footer>
 
 <!-- MODAL AUTH -->
@@ -255,11 +172,20 @@
                 <div id="panelLogin">
                     <div class="mb-3">
                         <label class="form-label fw-bold">Correo electrónico</label>
-                        <input type="email" class="form-control" id="loginCorreo" placeholder="tucorreo@gmail.com">
+                        <input type="email" class="form-control" id="loginCorreo"
+                               placeholder="ejemplo@correo.com"
+                               oninput="limpiarCampo('loginCorreo','loginErr')">
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">Contraseña</label>
-                        <input type="password" class="form-control" id="loginPass">
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="loginPass"
+                                   oninput="limpiarCampo('loginPass','loginErr')">
+                            <button class="btn btn-outline-secondary" type="button"
+                                    onclick="togglePass('loginPass',this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div id="loginErr" class="alert alert-danger d-none py-2"></div>
                     <button class="btn-cotizar" onclick="loginCliente()">
@@ -276,33 +202,60 @@
                 <div id="panelRegistro" class="d-none">
                     <div class="row g-2">
                         <div class="col-6">
-                            <label class="form-label fw-bold">Nombre</label>
-                            <input type="text" class="form-control" id="rNombre">
+                            <label class="form-label fw-bold">Nombre <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="rNombre"
+                                   placeholder="Ej: Carlos" maxlength="80"
+                                   oninput="limpiarCampo('rNombre','regErr')">
                         </div>
                         <div class="col-6">
-                            <label class="form-label fw-bold">Apellido</label>
-                            <input type="text" class="form-control" id="rApellido">
+                            <label class="form-label fw-bold">Apellido <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="rApellido"
+                                   placeholder="Ej: Ramírez" maxlength="80"
+                                   oninput="limpiarCampo('rApellido','regErr')">
                         </div>
                         <div class="col-12">
-                            <label class="form-label fw-bold">Cédula colombiana</label>
+                            <label class="form-label fw-bold">Cédula colombiana <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="rCedula"
-                                   min="10000000" max="1299999999" placeholder="Ej: 1033689077">
+                                   placeholder="Ej: 1033689077"
+                                   min="10000000" max="1299999999"
+                                   oninput="limpiarCampo('rCedula','regErr')">
+                            <small class="text-muted">Entre 10.000.000 y 1.299.999.999</small>
                         </div>
                         <div class="col-12">
-                            <label class="form-label fw-bold">Correo</label>
-                            <input type="email" class="form-control" id="rCorreo">
+                            <label class="form-label fw-bold">Correo electrónico <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="rCorreo"
+                                   placeholder="ejemplo@correo.com"
+                                   oninput="limpiarCampo('rCorreo','regErr')">
                         </div>
                         <div class="col-12">
-                            <label class="form-label fw-bold">Teléfono</label>
-                            <input type="tel" class="form-control" id="rTelefono" placeholder="311 555 73 89">
+                            <label class="form-label fw-bold">Teléfono celular <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="rTelefono"
+                                   placeholder="Ej: 3001234567" maxlength="10"
+                                   oninput="limpiarCampo('rTelefono','regErr')">
+                            <small class="text-muted">10 dígitos, debe empezar por 3</small>
                         </div>
                         <div class="col-12">
-                            <label class="form-label fw-bold">Fecha de nacimiento</label>
-                            <input type="date" class="form-control" id="rFecha">
+                            <label class="form-label fw-bold">Fecha de nacimiento <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="rFecha"
+                                   oninput="limpiarCampo('rFecha','regErr')">
+                            <small class="text-muted">Debes ser mayor de 18 años</small>
                         </div>
                         <div class="col-12">
-                            <label class="form-label fw-bold">Contraseña</label>
-                            <input type="password" class="form-control" id="rPass">
+                            <label class="form-label fw-bold">Contraseña <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="rPass"
+                                       oninput="checkPassHints(); limpiarCampo('rPass','regErr')">
+                                <button class="btn btn-outline-secondary" type="button"
+                                        onclick="togglePass('rPass',this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <!-- Indicadores de contraseña en tiempo real -->
+                            <div class="pass-hints mt-1">
+                                <span id="hint8"    class="hint-mal"><i class="fas fa-times-circle"></i> 8 caracteres</span>
+                                <span id="hintMay"  class="hint-mal"><i class="fas fa-times-circle"></i> Mayúscula</span>
+                                <span id="hintNum"  class="hint-mal"><i class="fas fa-times-circle"></i> Número</span>
+                            </div>
                         </div>
                     </div>
                     <div id="regErr" class="alert alert-danger d-none py-2 mt-2"></div>
@@ -310,6 +263,7 @@
                         <i class="fas fa-user-plus"></i> Crear Cuenta Gratis
                     </button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -319,17 +273,18 @@
 <div class="modal fade" id="modalCotizar" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" style="background:linear-gradient(135deg,#25d366,#128c7e); color:white; border:none;">
+            <div class="modal-header" style="background:linear-gradient(135deg,#25d366,#128c7e);color:white;border:none;">
                 <h5 class="modal-title fw-bold"><i class="fab fa-whatsapp"></i> Cotizar por WhatsApp</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body text-center p-4">
-                <img id="cotizarImg" src="" alt="moto" style="width:100%; height:180px; object-fit:cover; border-radius:12px; margin-bottom:15px;">
+                <img id="cotizarImg" src="" alt="moto"
+                     style="width:100%;height:180px;object-fit:cover;border-radius:12px;margin-bottom:15px;">
                 <h5 class="fw-bold" id="cotizarNombre"></h5>
                 <p class="text-muted mb-1" id="cotizarInfo"></p>
                 <p class="fw-bold fs-4 text-success" id="cotizarPrecio"></p>
                 <hr>
-                <p class="text-muted">Un asesor te atenderá por WhatsApp con toda la información 🏍️</p>
+                <p class="text-muted">Un asesor te atenderá por WhatsApp 🏍️</p>
                 <button class="btn btn-success btn-lg w-100 fw-bold" id="btnWsp">
                     <i class="fab fa-whatsapp"></i> Enviar Cotización por WhatsApp
                 </button>
@@ -340,13 +295,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// ══════════════════════════════════════════════
-// CONFIGURACIÓN
-// ══════════════════════════════════════════════
-const WHATSAPP_NUM = '573115557389'; // ← cambia por tu número real (57 + número)
+const WHATSAPP_NUM = '573115557389';
 const BASE = 'http://localhost/Concesionario/Concesionario/BACKEND/Api';
 
-// Fotos reales por modelo/marca (agrega las que quieras)
 const FOTOS = {
     'CB 125F':     'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600',
     'YZF-R3':      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600',
@@ -359,16 +310,231 @@ const FOTOS = {
     'default':     'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600'
 };
 
-let motosData       = [];
-let motoSeleccionada = null;
-let clienteSession  = JSON.parse(sessionStorage.getItem('cliente') || 'null');
+let motosData = [], motoSeleccionada = null;
+let clienteSession = JSON.parse(sessionStorage.getItem('cliente') || 'null');
+
+window.onload = () => { actualizarNavbar(); cargarMotos(); };
 
 // ══════════════════════════════════════════════
-window.onload = () => {
-    actualizarNavbar();
-    cargarMotos();
-};
+// UTILIDADES UI
+// ══════════════════════════════════════════════
+function togglePass(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const esPass = input.type === 'password';
+    input.type = esPass ? 'text' : 'password';
+    btn.innerHTML = esPass ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+}
 
+function limpiarCampo(campoId, errId) {
+    document.getElementById(campoId)?.classList.remove('is-invalid', 'is-valid');
+    document.getElementById(errId)?.classList.add('d-none');
+}
+
+function marcarCampo(id, valido) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('is-valid', 'is-invalid');
+    el.classList.add(valido ? 'is-valid' : 'is-invalid');
+}
+
+function mostrarError(errDiv, mensaje) {
+    errDiv.innerHTML = `<i class="fas fa-exclamation-circle me-1"></i>${mensaje}`;
+    errDiv.classList.remove('d-none');
+}
+
+function checkPassHints() {
+    const val = document.getElementById('rPass').value;
+    const set = (id, ok) => {
+        const el = document.getElementById(id);
+        el.className = ok ? 'hint-ok' : 'hint-mal';
+        el.innerHTML = `<i class="fas fa-${ok ? 'check' : 'times'}-circle"></i> ${el.textContent.replace(/[✓✗]/g,'').trim()}`;
+    };
+    const txt = { hint8: '8 caracteres', hintMay: 'Mayúscula', hintNum: 'Número' };
+    document.getElementById('hint8').innerHTML   = `<i class="fas fa-${val.length >= 8      ? 'check':'times'}-circle"></i> 8 caracteres`;
+    document.getElementById('hint8').className   = val.length >= 8      ? 'hint-ok' : 'hint-mal';
+    document.getElementById('hintMay').innerHTML = `<i class="fas fa-${/[A-Z]/.test(val)   ? 'check':'times'}-circle"></i> Mayúscula`;
+    document.getElementById('hintMay').className = /[A-Z]/.test(val)   ? 'hint-ok' : 'hint-mal';
+    document.getElementById('hintNum').innerHTML = `<i class="fas fa-${/[0-9]/.test(val)   ? 'check':'times'}-circle"></i> Número`;
+    document.getElementById('hintNum').className = /[0-9]/.test(val)   ? 'hint-ok' : 'hint-mal';
+}
+
+// ══════════════════════════════════════════════
+// VALIDACIONES
+// ══════════════════════════════════════════════
+function soloLetras(t)             { return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(t.trim()); }
+function validarCorreo(c)          { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c); }
+function validarTelColombia(t)     { return /^3\d{9}$/.test(t.replace(/[\s\-]/g,'')); }
+function validarCedula(cc)         { return cc >= 10000000 && cc <= 1299999999; }
+function validarPassword(p)        {
+    return { ok: p.length>=8 && /[A-Z]/.test(p) && /[0-9]/.test(p),
+             longitud: p.length>=8, mayus: /[A-Z]/.test(p), num: /[0-9]/.test(p) };
+}
+function validarEdad(f) {
+    const hoy = new Date(), nac = new Date(f);
+    let edad = hoy.getFullYear() - nac.getFullYear();
+    if (hoy.getMonth() < nac.getMonth() ||
+       (hoy.getMonth() === nac.getMonth() && hoy.getDate() < nac.getDate())) edad--;
+    return edad;
+}
+
+// ══════════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════════
+async function loginCliente() {
+    const correo = document.getElementById('loginCorreo').value.trim();
+    const pass   = document.getElementById('loginPass').value;
+    const err    = document.getElementById('loginErr');
+    err.classList.add('d-none');
+    ['loginCorreo','loginPass'].forEach(id =>
+        document.getElementById(id).classList.remove('is-valid','is-invalid'));
+
+    // Validar correo
+    if (!correo) {
+        marcarCampo('loginCorreo', false);
+        mostrarError(err, 'El correo electrónico es obligatorio.');
+        return;
+    }
+    if (!validarCorreo(correo)) {
+        marcarCampo('loginCorreo', false);
+        mostrarError(err, 'Ingresa un correo válido. Ej: nombre@gmail.com');
+        return;
+    }
+    marcarCampo('loginCorreo', true);
+
+    // Validar contraseña
+    if (!pass) {
+        marcarCampo('loginPass', false);
+        mostrarError(err, 'La contraseña es obligatoria.');
+        return;
+    }
+    if (pass.length < 6) {
+        marcarCampo('loginPass', false);
+        mostrarError(err, 'La contraseña debe tener al menos 6 caracteres.');
+        return;
+    }
+    marcarCampo('loginPass', true);
+
+    try {
+        const res  = await fetch(`${BASE}/tienda.php?action=login`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo, password: pass })
+        });
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById('loginCorreo').value = '';
+            document.getElementById('loginPass').value   = '';
+            ['loginCorreo','loginPass'].forEach(id =>
+                document.getElementById(id).classList.remove('is-valid','is-invalid'));
+            clienteSession = data.cliente;
+            sessionStorage.setItem('cliente', JSON.stringify(clienteSession));
+            bootstrap.Modal.getInstance(document.getElementById('modalAuth')).hide();
+            actualizarNavbar();
+            const pendiente = sessionStorage.getItem('moto_pendiente');
+            if (pendiente) {
+                motoSeleccionada = motosData.find(m => m.id_moto == pendiente);
+                sessionStorage.removeItem('moto_pendiente');
+                setTimeout(abrirCotizar, 400);
+            }
+        } else {
+            marcarCampo('loginCorreo', false);
+            marcarCampo('loginPass',   false);
+            mostrarError(err, data.message || 'Correo o contraseña incorrectos.');
+        }
+    } catch { mostrarError(err, 'Error de conexión. Intenta de nuevo.'); }
+}
+
+// ══════════════════════════════════════════════
+// REGISTRO
+// ══════════════════════════════════════════════
+async function registrarCliente() {
+    const err = document.getElementById('regErr');
+    err.classList.add('d-none');
+    ['rNombre','rApellido','rCedula','rCorreo','rTelefono','rFecha','rPass']
+        .forEach(id => document.getElementById(id).classList.remove('is-valid','is-invalid'));
+
+    const nombre   = document.getElementById('rNombre').value.trim();
+    const apellido = document.getElementById('rApellido').value.trim();
+    const cedula   = parseInt(document.getElementById('rCedula').value);
+    const correo   = document.getElementById('rCorreo').value.trim();
+    const telefono = document.getElementById('rTelefono').value.trim().replace(/[\s\-]/g,'');
+    const fecha    = document.getElementById('rFecha').value;
+    const pass     = document.getElementById('rPass').value;
+
+    // 1. Nombre
+    if (!nombre) { marcarCampo('rNombre',false); mostrarError(err,'El nombre es obligatorio.'); return; }
+    if (nombre.length < 2) { marcarCampo('rNombre',false); mostrarError(err,'El nombre debe tener al menos 2 caracteres.'); return; }
+    if (!soloLetras(nombre)) { marcarCampo('rNombre',false); mostrarError(err,'El nombre solo puede contener letras. No se permiten números ni caracteres especiales.'); return; }
+    marcarCampo('rNombre', true);
+
+    // 2. Apellido
+    if (!apellido) { marcarCampo('rApellido',false); mostrarError(err,'El apellido es obligatorio.'); return; }
+    if (apellido.length < 2) { marcarCampo('rApellido',false); mostrarError(err,'El apellido debe tener al menos 2 caracteres.'); return; }
+    if (!soloLetras(apellido)) { marcarCampo('rApellido',false); mostrarError(err,'El apellido solo puede contener letras. No se permiten números ni caracteres especiales.'); return; }
+    marcarCampo('rApellido', true);
+
+    // 3. Cédula
+    if (!cedula || isNaN(cedula)) { marcarCampo('rCedula',false); mostrarError(err,'La cédula es obligatoria.'); return; }
+    if (!validarCedula(cedula)) { marcarCampo('rCedula',false); mostrarError(err,'Ingresa una cédula colombiana válida (entre 10.000.000 y 1.299.999.999).'); return; }
+    marcarCampo('rCedula', true);
+
+    // 4. Correo
+    if (!correo) { marcarCampo('rCorreo',false); mostrarError(err,'El correo electrónico es obligatorio.'); return; }
+    if (!validarCorreo(correo)) { marcarCampo('rCorreo',false); mostrarError(err,'Ingresa un correo válido. Ej: nombre@gmail.com'); return; }
+    marcarCampo('rCorreo', true);
+
+    // 5. Teléfono colombiano
+    if (!telefono) { marcarCampo('rTelefono',false); mostrarError(err,'El teléfono es obligatorio.'); return; }
+    if (!validarTelColombia(telefono)) { marcarCampo('rTelefono',false); mostrarError(err,'Ingresa un celular colombiano válido: 10 dígitos comenzando por 3. Ej: 3001234567'); return; }
+    marcarCampo('rTelefono', true);
+
+    // 6. Fecha — mayor de 18 años
+    if (!fecha) { marcarCampo('rFecha',false); mostrarError(err,'La fecha de nacimiento es obligatoria.'); return; }
+    const edad = validarEdad(fecha);
+    if (edad < 18) { marcarCampo('rFecha',false); mostrarError(err,`Debes ser mayor de 18 años para registrarte. Actualmente tienes ${edad} año${edad===1?'':'s'}.`); return; }
+    if (edad > 100) { marcarCampo('rFecha',false); mostrarError(err,'Verifica tu fecha de nacimiento.'); return; }
+    marcarCampo('rFecha', true);
+
+    // 7. Contraseña segura
+    if (!pass) { marcarCampo('rPass',false); mostrarError(err,'La contraseña es obligatoria.'); return; }
+    const { ok, longitud, mayus, num } = validarPassword(pass);
+    if (!ok) {
+        marcarCampo('rPass', false);
+        const faltan = [];
+        if (!longitud) faltan.push('mínimo 8 caracteres');
+        if (!mayus)    faltan.push('al menos una letra mayúscula');
+        if (!num)      faltan.push('al menos un número');
+        mostrarError(err, `La contraseña debe tener: ${faltan.join(', ')}.`);
+        return;
+    }
+    marcarCampo('rPass', true);
+
+    // Todo válido → enviar
+    try {
+        const res  = await fetch(`${BASE}/tienda.php?action=registro`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, apellido, cedula, correo, telefono, fecha_nacimiento: fecha, password: pass, id_ciudad: 1 })
+        });
+        const data = await res.json();
+        if (data.success) {
+            clienteSession = data.cliente;
+            sessionStorage.setItem('cliente', JSON.stringify(clienteSession));
+            bootstrap.Modal.getInstance(document.getElementById('modalAuth')).hide();
+            actualizarNavbar();
+            const pendiente = sessionStorage.getItem('moto_pendiente');
+            if (pendiente) {
+                motoSeleccionada = motosData.find(m => m.id_moto == pendiente);
+                sessionStorage.removeItem('moto_pendiente');
+                setTimeout(abrirCotizar, 400);
+            }
+        } else {
+            mostrarError(err, data.message || 'Error al crear la cuenta.');
+        }
+    } catch { mostrarError(err, 'Error de conexión. Intenta de nuevo.'); }
+}
+
+// ══════════════════════════════════════════════
+// NAVBAR / SESIÓN
+// ══════════════════════════════════════════════
 function actualizarNavbar() {
     if (clienteSession) {
         document.getElementById('btnLogin').classList.add('d-none');
@@ -381,61 +547,47 @@ function actualizarNavbar() {
         document.getElementById('clienteNombreNav').classList.add('d-none');
     }
 }
+function cerrarSesion() { sessionStorage.removeItem('cliente'); clienteSession = null; actualizarNavbar(); }
 
 // ══════════════════════════════════════════════
-// CARGAR MOTOS
+// MOTOS
 // ══════════════════════════════════════════════
 async function cargarMotos() {
     try {
         const res  = await fetch(`${BASE}/tienda.php?action=motos`);
         const data = await res.json();
-        if (data.success) {
-            motosData = data.data;
-            llenarCategorias();
-            renderCatalogo(motosData);
-        }
+        if (data.success) { motosData = data.data; llenarCategorias(); renderCatalogo(motosData); }
     } catch (e) {
         document.getElementById('catalogoMotos').innerHTML =
             `<div class="col-12 text-center text-danger py-5">
                 <i class="fas fa-exclamation-circle fa-2x"></i><br>
-                Error al conectar con el servidor. ¿Está XAMPP corriendo?
-             </div>`;
+                Error al conectar. ¿Está XAMPP corriendo?</div>`;
     }
 }
-
 function llenarCategorias() {
     const cats = [...new Set(motosData.map(m => m.categoria))];
     const sel  = document.getElementById('filtroCategoria');
-    cats.forEach(c => {
-        const o = document.createElement('option');
-        o.value = c; o.textContent = c; sel.appendChild(o);
-    });
+    cats.forEach(c => { const o = document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
 }
-
 function renderCatalogo(motos) {
     document.getElementById('totalMotos').textContent =
-        `${motos.length} moto${motos.length !== 1 ? 's' : ''} disponible${motos.length !== 1 ? 's' : ''}`;
-
+        `${motos.length} moto${motos.length!==1?'s':''} disponible${motos.length!==1?'s':''}`;
     const div = document.getElementById('catalogoMotos');
     if (motos.length === 0) {
         div.innerHTML = `<div class="col-12 text-center py-5 text-muted">
-            <i class="fas fa-search fa-3x mb-3"></i><br>
-            No encontramos motos con esos filtros</div>`;
-        return;
+            <i class="fas fa-search fa-3x mb-3"></i><br>No encontramos motos con esos filtros</div>`; return;
     }
-
     div.innerHTML = motos.map(m => {
-        const foto  = FOTOS[m.modelo] || FOTOS['default'];
+        const foto = FOTOS[m.modelo] || FOTOS['default'];
         const agotado = m.stock_disponible <= 0;
         return `
         <div class="col-lg-4 col-md-6">
             <div class="moto-card">
                 <div class="moto-img-wrap">
-                    <img src="${foto}" alt="${m.marca} ${m.modelo}"
-                         onerror="this.src='${FOTOS['default']}'">
+                    <img src="${foto}" alt="${m.marca} ${m.modelo}" onerror="this.src='${FOTOS['default']}'">
                     <span class="badge-cat">${m.categoria}</span>
-                    <span class="badge-stock ${agotado ? 'badge-agotado' : ''}">
-                        ${agotado ? 'Agotado' : m.stock_disponible + ' disponibles'}
+                    <span class="badge-stock ${agotado?'badge-agotado':''}">
+                        ${agotado ? 'Agotado' : m.stock_disponible+' disponibles'}
                     </span>
                 </div>
                 <div class="card-body-custom">
@@ -446,7 +598,7 @@ function renderCatalogo(motos) {
                         <span><i class="fas fa-palette"></i> ${m.color}</span>
                     </div>
                     <div class="moto-precio">$${parseInt(m.precio_base).toLocaleString('es-CO')}</div>
-                    <button class="btn-cotizar" onclick="cotizar(${m.id_moto})" ${agotado ? 'disabled' : ''}>
+                    <button class="btn-cotizar" onclick="cotizar(${m.id_moto})" ${agotado?'disabled':''}>
                         ${agotado
                             ? '<i class="fas fa-times-circle"></i> Sin stock'
                             : '<i class="fas fa-comment-dollar"></i> Cotizar por WhatsApp'}
@@ -456,149 +608,44 @@ function renderCatalogo(motos) {
         </div>`;
     }).join('');
 }
-
 function filtrar() {
-    const texto    = document.getElementById('buscar').value.toLowerCase();
-    const cat      = document.getElementById('filtroCategoria').value;
+    const texto = document.getElementById('buscar').value.toLowerCase();
+    const cat   = document.getElementById('filtroCategoria').value;
     renderCatalogo(motosData.filter(m =>
         (m.marca.toLowerCase().includes(texto) || m.modelo.toLowerCase().includes(texto)) &&
-        (cat === '' || m.categoria === cat)
-    ));
+        (cat === '' || m.categoria === cat)));
 }
-
-document.getElementById('buscar').addEventListener('keyup', e => {
-    if (e.key === 'Enter') filtrar();
-});
+document.getElementById('buscar').addEventListener('keyup', e => { if(e.key==='Enter') filtrar(); });
 
 // ══════════════════════════════════════════════
 // COTIZAR
 // ══════════════════════════════════════════════
 function cotizar(id) {
     motoSeleccionada = motosData.find(m => m.id_moto == id);
-    if (!clienteSession) {
-        sessionStorage.setItem('moto_pendiente', id);
-        mostrarAuth('login');
-        return;
-    }
+    if (!clienteSession) { sessionStorage.setItem('moto_pendiente', id); mostrarAuth('login'); return; }
     abrirCotizar();
 }
-
 function abrirCotizar() {
     const m = motoSeleccionada;
-    document.getElementById('cotizarImg').src      = FOTOS[m.modelo] || FOTOS['default'];
+    document.getElementById('cotizarImg').src           = FOTOS[m.modelo] || FOTOS['default'];
     document.getElementById('cotizarNombre').textContent = `${m.marca} ${m.modelo}`;
     document.getElementById('cotizarInfo').textContent   = `${m.anio} · ${m.cilindrada_cc}cc · Color ${m.color}`;
-    document.getElementById('cotizarPrecio').textContent =
-        `$${parseInt(m.precio_base).toLocaleString('es-CO')}`;
-
+    document.getElementById('cotizarPrecio').textContent = `$${parseInt(m.precio_base).toLocaleString('es-CO')}`;
     const msg = encodeURIComponent(
-        `¡Hola MotoCon! 👋\n\n` +
-        `Soy *${clienteSession.nombre} ${clienteSession.apellido}* (CC: ${clienteSession.cedula}).\n` +
-        `Estoy interesado/a en la:\n\n` +
-        `🏍️ *${m.marca} ${m.modelo} ${m.anio}*\n` +
-        `⚙️ ${m.cilindrada_cc}cc · Color ${m.color}\n` +
-        `💰 $${parseInt(m.precio_base).toLocaleString('es-CO')}\n\n` +
-        `¿Me pueden dar más información para la cotización?`
-    );
+        `¡Hola MotoCon! 👋\n\nSoy *${clienteSession.nombre} ${clienteSession.apellido}* (CC: ${clienteSession.cedula}).\n` +
+        `Estoy interesado/a en la:\n\n🏍️ *${m.marca} ${m.modelo} ${m.anio}*\n` +
+        `⚙️ ${m.cilindrada_cc}cc · Color ${m.color}\n💰 $${parseInt(m.precio_base).toLocaleString('es-CO')}\n\n` +
+        `¿Me pueden dar más información para la cotización?`);
     document.getElementById('btnWsp').onclick = () =>
         window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`, '_blank');
-
     new bootstrap.Modal(document.getElementById('modalCotizar')).show();
 }
-
-// ══════════════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════════════
-function mostrarAuth(tab) {
-    mostrarTab(tab);
-    new bootstrap.Modal(document.getElementById('modalAuth')).show();
-}
-
+function mostrarAuth(tab) { mostrarTab(tab); new bootstrap.Modal(document.getElementById('modalAuth')).show(); }
 function mostrarTab(tab) {
-    document.getElementById('panelLogin').classList.toggle('d-none',    tab !== 'login');
-    document.getElementById('panelRegistro').classList.toggle('d-none', tab !== 'registro');
-    document.getElementById('tabBtnLogin').classList.toggle('active',    tab === 'login');
-    document.getElementById('tabBtnRegistro').classList.toggle('active', tab === 'registro');
-}
-
-function cerrarSesion() {
-    sessionStorage.removeItem('cliente');
-    clienteSession = null;
-    actualizarNavbar();
-}
-
-async function loginCliente() {
-    const correo = document.getElementById('loginCorreo').value.trim();
-    const pass   = document.getElementById('loginPass').value;
-    const err    = document.getElementById('loginErr');
-    err.classList.add('d-none');
-
-    if (!correo || !pass) { err.textContent = 'Completa todos los campos'; err.classList.remove('d-none'); return; }
-
-    try {
-        const res  = await fetch(`${BASE}/tienda.php?action=login`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ correo, password: pass })
-        });
-        const data = await res.json();
-        if (data.success) {
-            clienteSession = data.cliente;
-            sessionStorage.setItem('cliente', JSON.stringify(clienteSession));
-            bootstrap.Modal.getInstance(document.getElementById('modalAuth')).hide();
-            actualizarNavbar();
-            const pendiente = sessionStorage.getItem('moto_pendiente');
-            if (pendiente) {
-                motoSeleccionada = motosData.find(m => m.id_moto == pendiente);
-                sessionStorage.removeItem('moto_pendiente');
-                setTimeout(abrirCotizar, 400);
-            }
-        } else {
-            err.textContent = data.message;
-            err.classList.remove('d-none');
-        }
-    } catch { err.textContent = 'Error de conexión'; err.classList.remove('d-none'); }
-}
-
-async function registrarCliente() {
-    const err = document.getElementById('regErr');
-    err.classList.add('d-none');
-
-    const d = {
-        nombre:           document.getElementById('rNombre').value.trim(),
-        apellido:         document.getElementById('rApellido').value.trim(),
-        cedula:           parseInt(document.getElementById('rCedula').value),
-        correo:           document.getElementById('rCorreo').value.trim(),
-        telefono:         document.getElementById('rTelefono').value.trim(),
-        fecha_nacimiento: document.getElementById('rFecha').value,
-        password:         document.getElementById('rPass').value,
-        id_ciudad:        1
-    };
-
-    if (!d.nombre||!d.apellido||!d.cedula||!d.correo||!d.telefono||!d.fecha_nacimiento||!d.password) {
-        err.textContent = 'Completa todos los campos'; err.classList.remove('d-none'); return;
-    }
-
-    try {
-        const res  = await fetch(`${BASE}/tienda.php?action=registro`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(d)
-        });
-        const data = await res.json();
-        if (data.success) {
-            clienteSession = data.cliente;
-            sessionStorage.setItem('cliente', JSON.stringify(clienteSession));
-            bootstrap.Modal.getInstance(document.getElementById('modalAuth')).hide();
-            actualizarNavbar();
-            const pendiente = sessionStorage.getItem('moto_pendiente');
-            if (pendiente) {
-                motoSeleccionada = motosData.find(m => m.id_moto == pendiente);
-                sessionStorage.removeItem('moto_pendiente');
-                setTimeout(abrirCotizar, 400);
-            }
-        } else {
-            err.textContent = data.message; err.classList.remove('d-none');
-        }
-    } catch { err.textContent = 'Error de conexión'; err.classList.remove('d-none'); }
+    document.getElementById('panelLogin').classList.toggle('d-none',    tab!=='login');
+    document.getElementById('panelRegistro').classList.toggle('d-none', tab!=='registro');
+    document.getElementById('tabBtnLogin').classList.toggle('active',    tab==='login');
+    document.getElementById('tabBtnRegistro').classList.toggle('active', tab==='registro');
 }
 </script>
 </body>
