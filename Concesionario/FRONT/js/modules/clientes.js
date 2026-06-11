@@ -6,7 +6,97 @@ const clientesModule = {
     init(container) {
         this.container = container;
         this.render();
-        this.loadClientes();  // Carga datos reales de la BD
+        this.loadClientes();
+    },
+
+    // ══════════════════════════════════════════
+    // VALIDACIONES
+    // ══════════════════════════════════════════
+    validarTel(t)    { return /^3\d{9}$/.test(t.replace(/[\s\-]/g,'')); },
+    validarCorreo(c) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c); },
+    validarCC(cc)    { return cc >= 10000000 && cc <= 1299999999; },
+    soloLetras(t)    { return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(t.trim()); },
+    validarEdad(f) {
+        const hoy = new Date(), nac = new Date(f);
+        if (nac >= hoy) return -1; // fecha futura
+        let edad = hoy.getFullYear() - nac.getFullYear();
+        if (hoy.getMonth() < nac.getMonth() ||
+           (hoy.getMonth() === nac.getMonth() && hoy.getDate() < nac.getDate())) edad--;
+        return edad;
+    },
+
+    validarFormulario() {
+        const cedula   = parseInt(document.getElementById('cedula').value);
+        const nombre   = document.getElementById('nombre').value.trim();
+        const apellido = document.getElementById('apellido').value.trim();
+        const correo   = document.getElementById('correo').value.trim();
+        const telefono = document.getElementById('telefono').value.trim();
+        const fecha    = document.getElementById('fechaNacimiento').value;
+
+        // Limpiar estados
+        ['cedula','nombre','apellido','correo','telefono','fechaNacimiento']
+            .forEach(id => document.getElementById(id)
+                .classList.remove('is-valid','is-invalid'));
+
+        const err = (id, msg) => {
+            document.getElementById(id).classList.add('is-invalid');
+            this.showToast(msg, 'error');
+            return false;
+        };
+        const ok = id => document.getElementById(id).classList.add('is-valid');
+
+        // Cédula
+        if (!cedula || isNaN(cedula))
+            return err('cedula', 'La cédula es obligatoria.');
+        if (!this.validarCC(cedula))
+            return err('cedula', 'Cédula inválida. Debe estar entre 10.000.000 y 1.299.999.999.');
+        ok('cedula');
+
+        // Nombre
+        if (!nombre)
+            return err('nombre', 'El nombre es obligatorio.');
+        if (nombre.length < 2)
+            return err('nombre', 'El nombre debe tener al menos 2 caracteres.');
+        if (!this.soloLetras(nombre))
+            return err('nombre', 'El nombre solo puede contener letras. Sin números ni símbolos.');
+        ok('nombre');
+
+        // Apellido
+        if (!apellido)
+            return err('apellido', 'El apellido es obligatorio.');
+        if (apellido.length < 2)
+            return err('apellido', 'El apellido debe tener al menos 2 caracteres.');
+        if (!this.soloLetras(apellido))
+            return err('apellido', 'El apellido solo puede contener letras. Sin números ni símbolos.');
+        ok('apellido');
+
+        // Correo
+        if (!correo)
+            return err('correo', 'El correo es obligatorio.');
+        if (!this.validarCorreo(correo))
+            return err('correo', 'Correo inválido. Ej: nombre@gmail.com');
+        ok('correo');
+
+        // Teléfono
+        if (!telefono)
+            return err('telefono', 'El teléfono es obligatorio.');
+        if (!this.validarTel(telefono))
+            return err('telefono', 'Teléfono inválido. Debe tener 10 dígitos y empezar por 3. Ej: 3001234567');
+        ok('telefono');
+
+        // Fecha nacimiento
+        if (!fecha)
+            return err('fechaNacimiento', 'La fecha de nacimiento es obligatoria.');
+        const edad = this.validarEdad(fecha);
+        if (edad === -1)
+            return err('fechaNacimiento', 'La fecha de nacimiento no puede ser en el futuro.');
+        if (edad < 18)
+            return err('fechaNacimiento', `Debes tener al menos 18 años. Actualmente tienes ${edad} año${edad===1?'':'s'}.`);
+        if (edad > 100)
+            return err('fechaNacimiento', 'Verifica la fecha de nacimiento.');
+        ok('fechaNacimiento');
+
+        return true;
     },
 
     render() {
@@ -35,7 +125,6 @@ const clientesModule = {
                             </button>
                         </div>
                     </div>
-
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="table-dark">
@@ -67,43 +156,51 @@ const clientesModule = {
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="clienteForm">
+                            <form id="clienteForm" novalidate>
                                 <input type="hidden" id="clienteId">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Cédula *</label>
+                                        <label class="form-label">Cédula <span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" id="cedula"
-                                               required min="10000000" max="1299999999">
-                                        <small class="text-muted">Formato: 10-13 dígitos</small>
+                                               min="10000000" max="1299999999"
+                                               placeholder="Ej: 1033689077">
+                                        <small class="text-muted">Entre 10.000.000 y 1.299.999.999</small>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Teléfono *</label>
-                                        <input type="tel" class="form-control" id="telefono" required>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Nombre *</label>
-                                        <input type="text" class="form-control" id="nombre" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Apellido *</label>
-                                        <input type="text" class="form-control" id="apellido" required>
+                                        <label class="form-label">Teléfono <span class="text-danger">*</span></label>
+                                        <input type="tel" class="form-control" id="telefono"
+                                               maxlength="10" placeholder="Ej: 3001234567"
+                                               oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)">
+                                        <small class="text-muted">10 dígitos, empieza por 3</small>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Correo *</label>
-                                        <input type="email" class="form-control" id="correo" required>
+                                        <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nombre"
+                                               maxlength="80" placeholder="Solo letras">
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Fecha de Nacimiento *</label>
-                                        <input type="date" class="form-control" id="fechaNacimiento" required>
+                                        <label class="form-label">Apellido <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="apellido"
+                                               maxlength="80" placeholder="Solo letras">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Correo <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="correo"
+                                               placeholder="ejemplo@correo.com">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="fechaNacimiento">
+                                        <small class="text-muted">Debe ser mayor de 18 años</small>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Ciudad *</label>
-                                    <select class="form-control" id="idCiudad" required>
+                                    <label class="form-label">Ciudad <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="idCiudad">
                                         <option value="1">Bogotá</option>
                                     </select>
                                     <small class="text-muted">Solo Bogotá está disponible</small>
@@ -146,13 +243,11 @@ const clientesModule = {
                 </div>
             </div>
         `;
-
         document.getElementById('searchCliente').addEventListener('keyup', (e) => {
             if (e.key === 'Enter') this.search();
         });
     },
 
-    // Carga clientes REALES desde la BD
     async loadClientes(search = '') {
         try {
             const response = await API.getClientes(search);
@@ -161,24 +256,17 @@ const clientesModule = {
                 this.renderTable();
                 document.getElementById('pageInfo').textContent =
                     `Total: ${this.clientesData.length} clientes`;
-            } else {
-                this.showError(response.message);
-            }
-        } catch (error) {
-            this.showError('Error al cargar los clientes');
-        }
+            } else { this.showError(response.message); }
+        } catch (error) { this.showError('Error al cargar los clientes'); }
     },
 
     renderTable() {
         const tbody = document.getElementById('clientesTableBody');
         if (!tbody) return;
-
         if (this.clientesData.length === 0) {
             tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">
-                <i class="fas fa-inbox"></i> No hay clientes registrados</td></tr>`;
-            return;
+                <i class="fas fa-inbox"></i> No hay clientes registrados</td></tr>`; return;
         }
-
         tbody.innerHTML = this.clientesData.map(c => `
             <tr>
                 <td>${c.id_cliente}</td>
@@ -196,20 +284,18 @@ const clientesModule = {
                     <i class="fas fa-trash text-danger" style="cursor:pointer"
                        onclick="clientesModule.deleteCliente(${c.id_cliente})" title="Eliminar"></i>
                 </td>
-            </tr>
-        `).join('');
+            </tr>`).join('');
     },
 
-    search() {
-        const term = document.getElementById('searchCliente').value.trim();
-        this.loadClientes(term);
-    },
+    search() { this.loadClientes(document.getElementById('searchCliente').value.trim()); },
 
     showForm(clienteId = null) {
         const modal = new bootstrap.Modal(document.getElementById('clienteModal'));
         document.getElementById('clienteForm').reset();
         document.getElementById('clienteId').value = '';
         document.getElementById('activo').checked = true;
+        ['cedula','nombre','apellido','correo','telefono','fechaNacimiento']
+            .forEach(id => document.getElementById(id).classList.remove('is-valid','is-invalid'));
 
         if (clienteId) {
             document.getElementById('clienteModalTitle').innerHTML =
@@ -234,24 +320,22 @@ const clientesModule = {
     },
 
     async saveCliente() {
-        const form = document.getElementById('clienteForm');
-        if (!form.checkValidity()) { form.reportValidity(); return; }
+        if (!this.validarFormulario()) return;
 
         const id = document.getElementById('clienteId').value;
         const clienteData = {
             id_cliente:       id || null,
             cedula:           parseInt(document.getElementById('cedula').value),
-            nombre:           document.getElementById('nombre').value,
-            apellido:         document.getElementById('apellido').value,
-            correo:           document.getElementById('correo').value,
-            telefono:         document.getElementById('telefono').value,
+            nombre:           document.getElementById('nombre').value.trim(),
+            apellido:         document.getElementById('apellido').value.trim(),
+            correo:           document.getElementById('correo').value.trim(),
+            telefono:         document.getElementById('telefono').value.trim(),
             fecha_nacimiento: document.getElementById('fechaNacimiento').value,
             id_ciudad:        parseInt(document.getElementById('idCiudad').value),
             activo:           document.getElementById('activo').checked ? 1 : 0
         };
 
         try {
-            // Si tiene ID → actualizar, si no → crear nuevo
             const response = id
                 ? await API.updateCliente(clienteData)
                 : await API.saveCliente(clienteData);
@@ -260,12 +344,8 @@ const clientesModule = {
                 this.showToast(response.message, 'success');
                 bootstrap.Modal.getInstance(document.getElementById('clienteModal')).hide();
                 this.loadClientes();
-            } else {
-                this.showToast(response.message, 'error');
-            }
-        } catch (error) {
-            this.showToast('Error al guardar el cliente', 'error');
-        }
+            } else { this.showToast(response.message, 'error'); }
+        } catch (error) { this.showToast('Error al guardar el cliente', 'error'); }
     },
 
     editCliente(id) { this.showForm(id); },
@@ -277,11 +357,8 @@ const clientesModule = {
             const response = await API.deleteCliente(id);
             if (response.success) {
                 this.showToast('Cliente eliminado correctamente', 'success');
-                modal.hide();
-                this.loadClientes();
-            } else {
-                this.showToast(response.message, 'error');
-            }
+                modal.hide(); this.loadClientes();
+            } else { this.showToast(response.message, 'error'); }
         };
     },
 
@@ -306,7 +383,7 @@ const clientesModule = {
         if (typeof Swal !== 'undefined') {
             Swal.fire({ title: type === 'success' ? 'Éxito' : 'Error',
                 text: message, icon: type, toast: true,
-                position: 'top-end', showConfirmButton: false, timer: 3000 });
+                position: 'top-end', showConfirmButton: false, timer: 4000 });
         } else { alert(message); }
     },
 

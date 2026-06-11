@@ -3,6 +3,93 @@
 const empleadosModule = {
     empleadosData: [],
 
+    // ══════════════════════════════════════════
+    // VALIDACIONES
+    // ══════════════════════════════════════════
+    validarTel(t)    { return /^3\d{9}$/.test(t.replace(/[\s\-]/g,'')); },
+    validarCorreo(c) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c); },
+    validarCC(cc)    { return cc >= 10000000 && cc <= 1299999999; },
+    soloLetras(t)    { return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(t.trim()); },
+    validarFechaIngreso(f) {
+        const hoy    = new Date();
+        const fecha  = new Date(f);
+        const limite = new Date('1990-01-01');
+        return fecha <= hoy && fecha >= limite;
+    },
+
+    validarFormulario() {
+        const cedula   = parseInt(document.getElementById('empCedula').value);
+        const nombre   = document.getElementById('empNombre').value.trim();
+        const apellido = document.getElementById('empApellido').value.trim();
+        const cargo    = document.getElementById('empCargo').value;
+        const correo   = document.getElementById('empCorreo').value.trim();
+        const fecha    = document.getElementById('empFechaIngreso').value;
+        const username = document.getElementById('empUsername').value.trim();
+        const password = document.getElementById('empPassword').value;
+        const rol      = document.getElementById('empRol').value;
+
+        ['empCedula','empNombre','empApellido','empCargo','empCorreo','empFechaIngreso']
+            .forEach(id => document.getElementById(id)
+                .classList.remove('is-valid','is-invalid'));
+
+        const err = (id, msg) => {
+            document.getElementById(id).classList.add('is-invalid');
+            this.showToast(msg, 'error');
+            return false;
+        };
+        const ok = id => document.getElementById(id).classList.add('is-valid');
+
+        // Cédula
+        if (!cedula || isNaN(cedula))
+            return err('empCedula','La cédula es obligatoria.');
+        if (!this.validarCC(cedula))
+            return err('empCedula','Cédula inválida. Debe estar entre 10.000.000 y 1.299.999.999.');
+        ok('empCedula');
+
+        // Nombre
+        if (!nombre)
+            return err('empNombre','El nombre es obligatorio.');
+        if (!this.soloLetras(nombre))
+            return err('empNombre','El nombre solo puede contener letras. Sin números ni símbolos.');
+        ok('empNombre');
+
+        // Apellido
+        if (!apellido)
+            return err('empApellido','El apellido es obligatorio.');
+        if (!this.soloLetras(apellido))
+            return err('empApellido','El apellido solo puede contener letras. Sin números ni símbolos.');
+        ok('empApellido');
+
+        // Cargo
+        if (!cargo)
+            return err('empCargo','Selecciona un cargo.');
+        ok('empCargo');
+
+        // Correo
+        if (!correo)
+            return err('empCorreo','El correo es obligatorio.');
+        if (!this.validarCorreo(correo))
+            return err('empCorreo','Correo inválido. Ej: nombre@empresa.com');
+        ok('empCorreo');
+
+        // Fecha ingreso
+        if (!fecha)
+            return err('empFechaIngreso','La fecha de ingreso es obligatoria.');
+        if (!this.validarFechaIngreso(fecha))
+            return err('empFechaIngreso','La fecha de ingreso no puede ser futura ni anterior a 1990.');
+        ok('empFechaIngreso');
+
+        // Si pone username, debe poner también password y rol
+        if (username && !password)
+            { this.showToast('Si creas usuario debes ingresar una contraseña.','error'); return false; }
+        if (username && password.length < 6)
+            { this.showToast('La contraseña debe tener al menos 6 caracteres.','error'); return false; }
+        if (username && !rol)
+            { this.showToast('Si creas usuario debes seleccionar un rol.','error'); return false; }
+
+        return true;
+    },
+
     init(container) {
         this.container = container;
         this.render();
@@ -61,17 +148,18 @@ const empleadosModule = {
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="empleadoForm">
+                            <form id="empleadoForm" novalidate>
                                 <input type="hidden" id="empleadoId">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Cédula *</label>
-                                        <input type="number" class="form-control" id="empCedula" required
-                                               min="10000000" max="1299999999">
+                                        <label class="form-label">Cédula <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="empCedula"
+                                               min="10000000" max="1299999999" placeholder="Ej: 1033689077">
+                                        <small class="text-muted">Entre 10.000.000 y 1.299.999.999</small>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Cargo *</label>
-                                        <select class="form-control" id="empCargo" required>
+                                        <label class="form-label">Cargo <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="empCargo">
                                             <option value="">Seleccione...</option>
                                             <option value="Gerente">Gerente</option>
                                             <option value="Vendedor">Vendedor</option>
@@ -82,22 +170,26 @@ const empleadosModule = {
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Nombre *</label>
-                                        <input type="text" class="form-control" id="empNombre" required>
+                                        <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="empNombre"
+                                               maxlength="80" placeholder="Solo letras">
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Apellido *</label>
-                                        <input type="text" class="form-control" id="empApellido" required>
+                                        <label class="form-label">Apellido <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="empApellido"
+                                               maxlength="80" placeholder="Solo letras">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Correo *</label>
-                                        <input type="email" class="form-control" id="empCorreo" required>
+                                        <label class="form-label">Correo <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="empCorreo"
+                                               placeholder="ejemplo@empresa.com">
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Fecha Ingreso *</label>
-                                        <input type="date" class="form-control" id="empFechaIngreso" required>
+                                        <label class="form-label">Fecha Ingreso <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="empFechaIngreso">
+                                        <small class="text-muted">No puede ser fecha futura</small>
                                     </div>
                                 </div>
                                 <div class="form-check mb-3">
@@ -105,19 +197,20 @@ const empleadosModule = {
                                     <label class="form-check-label">Empleado Activo</label>
                                 </div>
                                 <hr>
-                                <h6><i class="fas fa-user-lock"></i> Credenciales (opcional)</h6>
+                                <h6><i class="fas fa-user-lock"></i> Credenciales del Sistema (opcional)</h6>
                                 <div class="alert alert-info py-2">
-                                    <small>Deja vacío si no quieres crear usuario ahora.</small>
+                                    <small>Si completas el username, debes ingresar contraseña y rol.</small>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Username</label>
                                         <input type="text" class="form-control" id="empUsername"
-                                               placeholder="usuario.sistema">
+                                               placeholder="ej: carlos.ramirez" maxlength="50">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Contraseña</label>
                                         <input type="password" class="form-control" id="empPassword">
+                                        <small class="text-muted">Mínimo 6 caracteres</small>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -153,6 +246,7 @@ const empleadosModule = {
                         <div class="modal-body text-center">
                             <p>¿Eliminar este empleado?</p>
                             <p class="fw-bold" id="deleteEmpNombre"></p>
+                            <small class="text-danger">Esta acción no se puede deshacer.</small>
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -167,18 +261,13 @@ const empleadosModule = {
     async loadEmpleados() {
         try {
             const response = await API.getEmpleados();
-            // ✅ El PHP devuelve {success, data} — leemos response.data
             if (response.success) {
                 this.empleadosData = response.data;
                 this.renderTable(this.empleadosData);
                 document.getElementById('empleadosInfo').textContent =
                     `Total: ${this.empleadosData.length} empleados`;
-            } else {
-                this.showError(response.message);
-            }
-        } catch (error) {
-            this.showError('Error al cargar empleados');
-        }
+            } else { this.showError(response.message); }
+        } catch (error) { this.showError('Error al cargar empleados'); }
     },
 
     renderTable(data) {
@@ -186,8 +275,7 @@ const empleadosModule = {
         if (!tbody) return;
         if (!data || data.length === 0) {
             tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted">
-                No hay empleados registrados</td></tr>`;
-            return;
+                No hay empleados registrados</td></tr>`; return;
         }
         tbody.innerHTML = data.map(e => `
             <tr>
@@ -197,37 +285,36 @@ const empleadosModule = {
                 <td>${e.cargo}</td>
                 <td>${e.correo}</td>
                 <td>${e.fecha_ingreso ? e.fecha_ingreso.split('T')[0] : ''}</td>
-                <td>${e.activo == 1
+                <td>${e.activo==1
                     ? '<span class="badge bg-success">Activo</span>'
                     : '<span class="badge bg-danger">Inactivo</span>'}</td>
-                <td>${e.tiene_usuario == 1
+                <td>${e.tiene_usuario==1
                     ? '<span class="badge bg-info">Sí</span>'
                     : '<span class="badge bg-secondary">No</span>'}</td>
                 <td>
                     <i class="fas fa-edit text-primary me-1" style="cursor:pointer"
                        onclick="empleadosModule.editEmpleado(${e.id_empleado})" title="Editar"></i>
                     <i class="fas fa-trash text-danger" style="cursor:pointer"
-                       onclick="empleadosModule.deleteEmpleado(${e.id_empleado}, '${e.nombre} ${e.apellido}')"
+                       onclick="empleadosModule.deleteEmpleado(${e.id_empleado},'${e.nombre} ${e.apellido}')"
                        title="Eliminar"></i>
                 </td>
-            </tr>
-        `).join('');
+            </tr>`).join('');
     },
 
     search() {
         const term = document.getElementById('searchEmpleado').value.toLowerCase();
-        const filtrados = this.empleadosData.filter(e =>
+        this.renderTable(this.empleadosData.filter(e =>
             e.nombre.toLowerCase().includes(term) ||
             e.apellido.toLowerCase().includes(term) ||
             e.cedula.toString().includes(term) ||
-            e.cargo.toLowerCase().includes(term)
-        );
-        this.renderTable(filtrados);
+            e.cargo.toLowerCase().includes(term)));
     },
 
     showForm(id = null) {
         document.getElementById('empleadoForm').reset();
         document.getElementById('empleadoId').value = '';
+        ['empCedula','empNombre','empApellido','empCargo','empCorreo','empFechaIngreso']
+            .forEach(id => document.getElementById(id).classList.remove('is-valid','is-invalid'));
         document.getElementById('empleadoModalTitle').innerHTML =
             '<i class="fas fa-user-plus"></i> Registrar Empleado';
         if (id) this.editEmpleado(id);
@@ -239,28 +326,30 @@ const empleadosModule = {
         if (!e) return;
         document.getElementById('empleadoModalTitle').innerHTML =
             '<i class="fas fa-user-edit"></i> Editar Empleado';
-        document.getElementById('empleadoId').value       = e.id_empleado;
-        document.getElementById('empCedula').value        = e.cedula;
-        document.getElementById('empNombre').value        = e.nombre;
-        document.getElementById('empApellido').value      = e.apellido;
-        document.getElementById('empCargo').value         = e.cargo;
-        document.getElementById('empCorreo').value        = e.correo;
-        document.getElementById('empFechaIngreso').value  = e.fecha_ingreso?.split('T')[0];
-        document.getElementById('empActivo').checked      = e.activo == 1;
+        document.getElementById('empleadoId').value      = e.id_empleado;
+        document.getElementById('empCedula').value       = e.cedula;
+        document.getElementById('empNombre').value       = e.nombre;
+        document.getElementById('empApellido').value     = e.apellido;
+        document.getElementById('empCargo').value        = e.cargo;
+        document.getElementById('empCorreo').value       = e.correo;
+        document.getElementById('empFechaIngreso').value = e.fecha_ingreso?.split('T')[0];
+        document.getElementById('empActivo').checked     = e.activo == 1;
         new bootstrap.Modal(document.getElementById('empleadoModal')).show();
     },
 
     async saveEmpleado() {
+        if (!this.validarFormulario()) return;
+
         const data = {
             id_empleado:   document.getElementById('empleadoId').value || null,
             cedula:        document.getElementById('empCedula').value,
-            nombre:        document.getElementById('empNombre').value,
-            apellido:      document.getElementById('empApellido').value,
+            nombre:        document.getElementById('empNombre').value.trim(),
+            apellido:      document.getElementById('empApellido').value.trim(),
             cargo:         document.getElementById('empCargo').value,
-            correo:        document.getElementById('empCorreo').value,
+            correo:        document.getElementById('empCorreo').value.trim(),
             fecha_ingreso: document.getElementById('empFechaIngreso').value,
             activo:        document.getElementById('empActivo').checked ? 1 : 0,
-            username:      document.getElementById('empUsername').value,
+            username:      document.getElementById('empUsername').value.trim(),
             password:      document.getElementById('empPassword').value,
             rol:           document.getElementById('empRol').value
         };
@@ -270,9 +359,7 @@ const empleadosModule = {
             this.showToast(response.message, 'success');
             bootstrap.Modal.getInstance(document.getElementById('empleadoModal')).hide();
             this.loadEmpleados();
-        } else {
-            this.showToast(response.message, 'error');
-        }
+        } else { this.showToast(response.message, 'error'); }
     },
 
     deleteEmpleado(id, nombre) {
@@ -280,22 +367,18 @@ const empleadosModule = {
         const modal = new bootstrap.Modal(document.getElementById('deleteEmpModal'));
         modal.show();
         document.getElementById('confirmDeleteEmpBtn').onclick = async () => {
-            const res = await API.request('empleados.php?action=delete', 'POST', { id_empleado: id });
+            const res = await API.request('empleados.php?action=delete','POST',{id_empleado:id});
             if (res.success) {
-                this.showToast(res.message, 'success');
-                modal.hide();
-                this.loadEmpleados();
-            } else {
-                this.showToast(res.message, 'error');
-            }
+                this.showToast(res.message,'success'); modal.hide(); this.loadEmpleados();
+            } else { this.showToast(res.message,'error'); }
         };
     },
 
     showToast(message, type) {
         if (typeof Swal !== 'undefined') {
-            Swal.fire({ title: type === 'success' ? 'Éxito' : 'Error',
-                text: message, icon: type, timer: 3000, showConfirmButton: false,
-                toast: true, position: 'top-end' });
+            Swal.fire({ title: type==='success'?'Éxito':'Error',
+                text: message, icon: type, timer: 4000,
+                showConfirmButton: false, toast: true, position: 'top-end' });
         } else { alert(message); }
     },
 
